@@ -1,30 +1,35 @@
 import { useState } from "react";
 import { lookupMock, lookupLive } from "./services/binService";
 import { sanitizeBIN } from "./utils/validate";
+import { mapBinRecord } from "./utils/mapBin";
+import Result from "./components/Result";
 
 export default function App() {
+  const isProd = process.env.NODE_ENV === "production";
   const [bin, setBin] = useState("");
-  const [source, setSource] = useState("mock");
+  const [source, setSource] = useState(isProd ? "live" : "mock");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState(null);
+  const [rawResult, setRawResult] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    setResult(null);
+    setRawResult(null);
     setLoading(true);
 
     try {
       const data =
         source === "live" ? await lookupLive(bin) : await lookupMock(bin);
-      setResult(data);
+      setRawResult(data); // may be null
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   }
+
+  const mapped = mapBinRecord(rawResult);
 
   return (
     <div style={{ padding: 16, fontFamily: "system-ui, sans-serif" }}>
@@ -76,11 +81,17 @@ export default function App() {
         </div>
       )}
 
-      <div style={{ marginTop: 12 }}>
-        {result === null && !loading && !error && (
-          <div>No match (try 457173, 45717360, 520082, or 601100).</div>
-        )}
-        {result && (
+      {/* Results */}
+      {!loading && !error && rawResult === null && (
+        <div style={{ marginTop: 12 }}>No Match.</div>
+      )}
+
+      {!loading && !error && mapped && <Result data={mapped} />}
+
+      {/* Keep raw JSON available for quick dev comparison */}
+      {!loading && !error && rawResult && (
+        <details style={{ marginTop: 12 }}>
+          <summary>Raw JSON (dev aid)</summary>
           <pre
             style={{
               background: "#111",
@@ -90,10 +101,10 @@ export default function App() {
               overflowX: "auto",
             }}
           >
-            {JSON.stringify(result, null, 2)}
+            {JSON.stringify(rawResult, null, 2)}
           </pre>
-        )}
-      </div>
+        </details>
+      )}
     </div>
   );
 }

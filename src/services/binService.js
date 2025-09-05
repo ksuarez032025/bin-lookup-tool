@@ -27,15 +27,23 @@ export async function lookupMock(rawInput) {
 
 export async function lookupLive(rawInput) {
   const bin = sanitizeBIN(rawInput);
+  console.log("📥 Raw input:", rawInput, "→ Sanitized:", bin);
+
   if (!isValidBIN(bin)) throw new Error("Enter 6-8 digits.");
 
   const url = `https://lookup.binlist.net/${bin}`;
-  const res = await fetch(url, { headers: { "Accept-Version": "3" } });
+  console.log("🌐 Fetching URL:", url);
+
+  const res = await fetch(url);
+
+  console.log("📡 Response status:", res.status);
 
   if (res.status === 404) return null; // BIN not found
   if (res.status === 429)
     throw new Error("Rate Limited. Try Mock mode or wait 1 hour.");
   if (!res.ok) throw new Error(`Lookup Failed (${res.status})`);
 
-  return await res.json();
+  const data = await res.json();
+  console.log("✅ Data received:", data);
+  return data;
 }

@@ -16,13 +16,10 @@ export default function App() {
     setLoading(true);
 
     try {
-      console.log("🚀 Submitting BIN:", bin, "Source:", source);
       const data =
         source === "live" ? await lookupLive(bin) : await lookupMock(bin);
-      console.log("🎯 Final result:", data);
       setResult(data);
     } catch (err) {
-      console.error("❌ Error caught:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);

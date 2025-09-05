@@ -22,3 +22,20 @@ export async function lookupMock(rawInput) {
   await new Promise((r) => setTimeout(r, 50));
   return record; // can be null if not found
 }
+
+// Live Binlist Lookup
+
+export async function lookupLive(rawInput) {
+  const bin = sanitizeBIN(rawInput);
+  if (!isValidBIN(bin)) throw new Error("Enter 6-8 digits.");
+
+  const url = `https://lookup.binlist.net/${bin}`;
+  const res = await fetch(url, { headers: { "Accept-Version": "3" } });
+
+  if (res.status === 404) return null; // BIN not found
+  if (res.status === 429)
+    throw new Error("Rate Limited. Try Mock mode or wait 1 hour.");
+  if (!res.ok) throw new Error(`Lookup Failed (${res.status})`);
+
+  return await res.json();
+}

@@ -32,12 +32,18 @@ export default function App() {
   const mapped = mapBinRecord(rawResult);
 
   return (
-    <div style={{ padding: 16, fontFamily: "system-ui, sans-serif" }}>
-      <h1>BIN / IIN Lookup</h1>
+    <div className="container py-4">
+      <h1 className="h3 mb-3">BIN / IIN Lookup</h1>
+      <p className="text-muted mb-4">
+        Enter the first <strong>6–8</strong> digits of a card to find the
+        issuer, type, and region.
+      </p>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="bin">BIN/IIN (6-8 digits)</label>
-        <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+      <form onSubmit={handleSubmit} className="row gy-3 gx-3 align-items-end">
+        <div className="col-12 col-sm-auto">
+          <label htmlFor="bin" className="form-label">
+            BIN/IIN (6–8 digits)
+          </label>
           <input
             id="bin"
             value={bin}
@@ -45,61 +51,79 @@ export default function App() {
             inputMode="numeric"
             placeholder="e.g. 457173 or 45717360"
             maxLength={8}
+            className="form-control"
           />
-          <button type="submit" disabled={loading}>
-            {loading ? "Looking..." : "Lookup"}
-          </button>
+          <div className="form-text">Digits only. We never store PANs.</div>
         </div>
 
         {/*Source Toggle */}
-        <div style={{ marginTop: 8 }}>
-          <label>
+        <div sclassName="col-12 col-sm-auto">
+          <span className="form-label d-block">Source</span>
+
+          <div className="btn-group" role="group" aria-label="Source">
             <input
               type="radio"
+              className="btn-check"
+              name="source"
+              id="src-mock"
               value="mock"
               checked={source === "mock"}
               onChange={(e) => setSource(e.target.value)}
             />
-            Mock (local JSON)
-          </label>
-          <label style={{ marginLeft: 12 }}>
+            <label className="btn btn-outline-secondary" htmlFor="src-mock">
+              Mock
+            </label>
+
             <input
               type="radio"
+              className="btn-check"
+              name="source"
+              id="src-live"
               value="live"
               checked={source === "live"}
               onChange={(e) => setSource(e.target.value)}
             />
-            Live (Binlist API)
-          </label>
+            <label className="btn btn-outline-primary" htmlFor="src-live">
+              Live
+            </label>
+          </div>
         </div>
-        <small id="help">Digits only. We never store PANs.</small>
+
+        <div className="col-12 col-sm-auto">
+          <button
+            type="submit"
+            disabled={loading || bin.length < 6}
+            className="btn btn-primary"
+          >
+            {loading ? "Looking..." : "Lookup"}
+          </button>
+        </div>
       </form>
 
       {error && (
-        <div style={{ marginTop: 12, color: "crimson" }}>
+        <div className="alert alert-danger mt-3" role="alert">
           <strong>Error:</strong> {error}
         </div>
       )}
 
       {/* Results */}
       {!loading && !error && rawResult === null && (
-        <div style={{ marginTop: 12 }}>No Match.</div>
+        <div className="mt-3 text-muted">No match.</div>
       )}
 
-      {!loading && !error && mapped && <Result data={mapped} />}
+      {!loading && !error && mapped && (
+        <div className="mt-3">
+          <Result data={mapped} />
+        </div>
+      )}
 
       {/* Keep raw JSON available for quick dev comparison */}
       {!loading && !error && rawResult && (
-        <details style={{ marginTop: 12 }}>
+        <details className="mt-3">
           <summary>Raw JSON (dev aid)</summary>
           <pre
-            style={{
-              background: "#111",
-              color: "#e7e7e7",
-              padding: 12,
-              borderRadius: 8,
-              overflowX: "auto",
-            }}
+            className="mt-2 p-3 rounded"
+            style={{ background: "#111", color: "#e7e7e7", overflowX: "auto" }}
           >
             {JSON.stringify(rawResult, null, 2)}
           </pre>

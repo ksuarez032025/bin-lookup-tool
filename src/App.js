@@ -34,69 +34,71 @@ export default function App() {
   return (
     <div className="container py-4">
       <h1 className="h3 mb-3">BIN / IIN Lookup</h1>
+
+      {/*Source Toggle */}
+      <div className="col-12 col-sm-auto mb-2">
+        <span className="form-label d-block">Source</span>
+
+        <div className="btn-group" role="group" aria-label="Source">
+          <input
+            type="radio"
+            className="btn-check"
+            name="source"
+            id="src-mock"
+            value="mock"
+            checked={source === "mock"}
+            onChange={(e) => setSource(e.target.value)}
+          />
+          <label className="btn btn-outline-secondary" htmlFor="src-mock">
+            Mock
+          </label>
+
+          <input
+            type="radio"
+            className="btn-check"
+            name="source"
+            id="src-live"
+            value="live"
+            checked={source === "live"}
+            onChange={(e) => setSource(e.target.value)}
+          />
+          <label className="btn btn-outline-primary" htmlFor="src-live">
+            Live
+          </label>
+        </div>
+      </div>
+
       <p className="text-muted mb-4">
         Enter the first <strong>6–8</strong> digits of a card to find the
         issuer, type, and region.
       </p>
 
-      <form onSubmit={handleSubmit} className="row gy-3 gx-3 align-items-end">
-        <div className="col-12 col-sm-auto">
+      <form onSubmit={handleSubmit} className="row gy-3">
+        <div className="col-12 col-md-8">
           <label htmlFor="bin" className="form-label">
             BIN/IIN (6–8 digits)
           </label>
-          <input
-            id="bin"
-            value={bin}
-            onChange={(e) => setBin(sanitizeBIN(e.target.value))}
-            inputMode="numeric"
-            placeholder="e.g. 457173 or 45717360"
-            maxLength={8}
-            className="form-control"
-          />
-          <div className="form-text">Digits only. We never store PANs.</div>
-        </div>
 
-        {/*Source Toggle */}
-        <div sclassName="col-12 col-sm-auto">
-          <span className="form-label d-block">Source</span>
-
-          <div className="btn-group" role="group" aria-label="Source">
+          <div className="input-group">
             <input
-              type="radio"
-              className="btn-check"
-              name="source"
-              id="src-mock"
-              value="mock"
-              checked={source === "mock"}
-              onChange={(e) => setSource(e.target.value)}
+              id="bin"
+              value={bin}
+              onChange={(e) => setBin(sanitizeBIN(e.target.value))}
+              inputMode="numeric"
+              placeholder="e.g. 457173 or 45717360"
+              maxLength={8}
+              className="form-control"
             />
-            <label className="btn btn-outline-secondary" htmlFor="src-mock">
-              Mock
-            </label>
-
-            <input
-              type="radio"
-              className="btn-check"
-              name="source"
-              id="src-live"
-              value="live"
-              checked={source === "live"}
-              onChange={(e) => setSource(e.target.value)}
-            />
-            <label className="btn btn-outline-primary" htmlFor="src-live">
-              Live
-            </label>
+            <button
+              type="submit"
+              disabled={loading || bin.length < 6}
+              className="btn btn-primary"
+            >
+              {loading ? "Looking..." : "Lookup"}
+            </button>
           </div>
-        </div>
 
-        <div className="col-12 col-sm-auto">
-          <button
-            type="submit"
-            disabled={loading || bin.length < 6}
-            className="btn btn-primary"
-          >
-            {loading ? "Looking..." : "Lookup"}
-          </button>
+          <div className="form-text">Digits only. We never store PANs.</div>
         </div>
       </form>
 

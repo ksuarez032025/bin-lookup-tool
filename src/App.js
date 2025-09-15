@@ -12,6 +12,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rawResult, setRawResult] = useState(null);
+  const [touched, setTouched] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -87,10 +88,15 @@ export default function App() {
                   id="bin"
                   value={bin}
                   onChange={(e) => setBin(sanitizeBIN(e.target.value))}
+                  onBlur={() => setTouched(true)}
                   inputMode="numeric"
                   placeholder="e.g. 457173 or 45717360"
                   maxLength={8}
-                  className="form-control"
+                  className={`form-control ${
+                    touched && bin.length > 0 && bin.length < 6
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 <button
                   type="submit"
@@ -102,6 +108,11 @@ export default function App() {
               </div>
 
               <div className="form-text">Digits only. We never store PANs.</div>
+              {touched && bin.length > 0 && bin.length < 6 && (
+                <div className="invalid-feedback d-block">
+                  Please enter at least 6 digits (supports 6-8).
+                </div>
+              )}
             </div>
           </form>
 

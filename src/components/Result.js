@@ -1,8 +1,11 @@
+import { countryCodeToFlag } from "../utils/mapBin";
+
 export default function Result({ data }) {
   if (!data) return null;
 
   const typeClass = badgeForType(data.type);
   const prepaidClass = badgeForPrepaid(data.prepaid);
+  const flag = countryCodeToFlag(data.countryCode);
 
   return (
     <div className="card shadow-sm result-card">
@@ -44,7 +47,9 @@ export default function Result({ data }) {
 
         {/* Country */}
         <p className="mb-0">
-          <strong>Country:</strong> {data.countryName}
+          <strong>Country:</strong>{" "}
+          {flag ? <span className="me-1">{flag}</span> : null}
+          {data.countryName}
           {data.countryCode ? ` (${data.countryCode})` : ""}
         </p>
       </div>

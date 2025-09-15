@@ -31,3 +31,13 @@ function safeUpper(s) {
 function boolToLabel(v) {
   return v === true ? "YES" : v === false ? "NO" : "UNKNOWN";
 }
+
+export function countryCodeToFlag(cc) {
+  const code = (cc || "").toUpperCase();
+  if (!/^[A-Z]{2}$/.test(code)) return "";
+  const OFFSET = 0x1f1e6 - "A".charCodeAt(0);
+  return (
+    String.fromCodePoint(code.charCodeAt(0) + OFFSET) +
+    String.fromCodePoint(code.charCodeAt(1) + OFFSET)
+  );
+}

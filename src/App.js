@@ -3,6 +3,7 @@ import { lookupMock, lookupLive } from "./services/binService";
 import { sanitizeBIN } from "./utils/validate";
 import { mapBinRecord } from "./utils/mapBin";
 import Result from "./components/Result";
+import Footer from "./components/Footer";
 
 export default function App() {
   const isProd = process.env.NODE_ENV === "production";
@@ -131,6 +132,7 @@ export default function App() {
           </pre>
         </details>
       )}
+      <Footer />
     </div>
   );
 }

@@ -33,13 +33,13 @@ export default function App() {
   const mapped = mapBinRecord(rawResult);
 
   return (
-    <div className="container py-4">
-      <div className="row">
+    <div className="container app-wrap">
+      <div className="app-main">
         <div className="col-12 col-lg-8 mx-auto">
-          <h1 className="h3 mb-3">BIN / IIN Lookup</h1>
+          <h1 className="h3 mb-2 app-title">BIN / IIN Lookup</h1>
 
           {/*Source Toggle */}
-          <div className="col-12 col-sm-auto mb-2">
+          <div className="source-toggle">
             <span className="form-label d-block">Source</span>
 
             <div className="btn-group" role="group" aria-label="Source">
@@ -126,18 +126,9 @@ export default function App() {
 
           {/* Keep raw JSON available for quick dev comparison */}
           {!loading && !error && rawResult && (
-            <details className="mt-3">
+            <details className="raw-json mt-3">
               <summary>Raw JSON (dev aid)</summary>
-              <pre
-                className="mt-2 p-3 rounded"
-                style={{
-                  background: "#111",
-                  color: "#e7e7e7",
-                  overflowX: "auto",
-                }}
-              >
-                {JSON.stringify(rawResult, null, 2)}
-              </pre>
+              <pre>{JSON.stringify(rawResult, null, 2)}</pre>
             </details>
           )}
           <Footer />

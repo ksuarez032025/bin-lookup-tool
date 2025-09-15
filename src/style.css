@@ -1,0 +1,55 @@
+.app-wrap {
+  padding-block: 1.5rem;
+}
+
+.app-main {
+  max-width: 820px;
+  margin-inline: auto;
+}
+
+.app-title {
+  letter-spacing: 0.2px;
+}
+
+.source-toggle {
+  margin-bottom: 0.75rem;
+}
+
+.result-card .card-title {
+  letter-spacing: 0.3px;
+}
+
+.result-card .text-break a {
+  word-break: break-word;
+}
+
+.badge-row {
+  gap: 0.5rem;
+}
+
+.raw-jason summary {
+  cursor: pointer;
+}
+
+.raw-json pre {
+  background: #111;
+  color: #e7e7e7;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+.app-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 3rem;
+  padding: 1rem 0 1.5rem;
+}
+
+.app-footer .links a {
+  text-decoration: none;
+}
+
+.app-footer .links a:hover {
+  text-decoration: underline;
+}

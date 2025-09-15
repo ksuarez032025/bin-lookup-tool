@@ -5,7 +5,7 @@ export default function Result({ data }) {
   const prepaidClass = badgeForPrepaid(data.prepaid);
 
   return (
-    <div className="card shadow-sm">
+    <div className="card shadow-sm result-card">
       <div className="card-body">
         {/* Title Row*/}
         <h5 className="card-title mb-2">
@@ -16,7 +16,7 @@ export default function Result({ data }) {
         </h5>
 
         {/* Badges */}
-        <div className="mb-3 d-flex flex-wrap gap-2">
+        <div className="mb-3 d-flex flex-wrap badge-row">
           <span className={`badge ${typeClass}`}>
             Type: {data.type || "UNKNOWN"}
           </span>

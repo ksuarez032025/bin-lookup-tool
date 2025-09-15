@@ -1,6 +1,9 @@
 export default function Result({ data }) {
   if (!data) return null;
 
+  const typeClass = badgeForType(data.type);
+  const prepaidClass = badgeForPrepaid(data.prepaid);
+
   return (
     <div className="card shadow-sm">
       <div className="card-body">
@@ -13,22 +16,21 @@ export default function Result({ data }) {
         </h5>
 
         {/* Badges */}
-        <div className="mb-3">
-          <span className="badge text-bg-secondary me-2">
+        <div className="mb-3 d-flex flex-wrap gap-2">
+          <span className={`badge ${typeClass}`}>
             Type: {data.type || "UNKNOWN"}
           </span>
-          <span className="badge text-bg-secondary">
+          <span className={`badge ${prepaidClass}`}>
             Prepaid: {data.prepaid || "UNKNOWN"}
           </span>
         </div>
 
         {/* Issuer */}
-        <p className="mb-2">
+        <p className="mb-2 text-break">
           <strong>Issuer:</strong> {data.bankName}
           {data.bankUrl ? (
             <>
-              {" "}
-              -{" "}
+              {" - "}
               <a
                 href={normalizeUrl(data.bankUrl)}
                 target="_blank"
@@ -53,4 +55,18 @@ export default function Result({ data }) {
 function normalizeUrl(url) {
   if (!url) return "";
   return url.startsWith("http") ? url : `https://${url}`;
+}
+
+function badgeForType(type) {
+  const t = (type || "").toUpperCase();
+  if (t === "DEBIT") return "text-bg-success";
+  if (t === "CREDIT") return "text-bg-primary";
+  return "text-bg-secondary";
+}
+
+function badgeForPrepaid(prepaid) {
+  const p = (prepaid || "").toUpperCase();
+  if (p === "YES") return "text-bg-warning";
+  if (p === "NO") return "text-bg-secondary";
+  return "text-bg-secondary";
 }
